@@ -1,0 +1,125 @@
+* we will be using babel; a javasript transpiler that converts ES6 code to backwards compatible vers of js in current and older browser envs
+* we will be using web pack; as our module bundler; most widely used
+* ensure files are in the correct folders as specified - in the tutorial he runs into an error for not having the 'components' folder in the 'src' folder
+* make sure not to mispell anything!!!1 (I did)
+* --save-dev saves the package as a dependency
+
+Dependencies:
+
+1. npm init - y;    creates a package.json file to keep track of our dependencies, dev dependencies and more; -y is shortcut for the defaults
+2. npm install react;    is a library
+3. npm install react-dom;    (DOM) has methods that can be used at the top-level of our web app
+4. npm install webpack --save-dev;    dash dash save dev adds it as a dependency
+5. npm install webpack-cli --save-dev;    increases speed and efficiency; provides commands to initialize a new webpack project; run webpack; watch for file changes and more
+6. npm install webpack-dev-server --save-dev;    this package gives us a single command live reload so when we save the server reloads the page w those changes
+7. npm install @babel/core --save-dev;    is our code transpiler
+8. npm install babel-loader --save-dev;    is a loader; which are what webpack uses to handle and process diff file types;loaders dictate how file types should be process as they are imported/loaded; this one traspiles javascript code; ex. Sass transpiles css
+9. npm install @babel/preset-react --save-dev;    contains presets for all react plugin; has by default ES6 and preset React for jsx
+10. npm install @babel/preset-env --save-dev;   allows us to use latest javascript code without having to manage which syntax transforms are needed by envs like the browser; makes our code smaller which increases effenciency
+11. npm install html-webpack-plugin --save-dev;    simplifies html file creation to serve our webpack bundles; ie assists in adding our bundled files to our html files
+
+Next we will configure webpack:
+(webpack if very malleable)
+
+1. we create a "webpack.config.js" file; to put all our configuration, loaders, and other build information
+2. we set up a module.exports at the very first line to export EVERYTHING from the file; to do so we wrap everything in curuly braces, ex. below
+  
+  - 1  module.exports = {
+  - 2  ..................
+  - 3  }
+
+3. we tell webpack where the entrypoint of our application is; we want the entry point to be a file called "index.js" inside a file called "src"; the key 'entry' tells webpack which file it should use to create a dependency graph-is used to resolve modules which are dependent on one another while also building modules that are required by other modules first
+  
+  entry: './src/index.js'
+
+4. we add 'index.js' file in a folder called 'src'
+5. since webpack is expecting the entry to be in 'index.js' we will add some React code to it; to do so we import:
+
+  import React from 'react';
+  import ReactDOM from 'react-dom';
+  import App from './components/App';
+
+  ReactDOM.render(<App />, document.getElementById('root'));
+
+6. next we create the 'App' component in the 'components' folder we reference in the third line
+7. in this file we:
+
+  import React, { Component } from 'react'
+
+  class App extends Component {
+    render() {
+      return (
+        <div>
+          <h1>Implicit Null</h1>
+        </div>
+      )
+    }
+  }
+
+  export default App;
+  -keep in mind extending the React Component class gives us access to the component lifecycle methods and one of them is render; export default exports a class function or primitive from a javascript file
+
+8. then we tell webpack the name and location of the bundled file that will be generated when we produce a production build; it is down with the key 'output'; here we bundle all our js files into one file called 'bundle.js'; when it is generate we want this to be placed in a folder named 'dist' to do this we define a path using the built in node 'path' module to use 'join' and '__dirname'; next we make it so our bundled js file will be loaded into an html file to do this we require the 'html-webpack-plugin'; we register this as a plugin use the key 'plugins' which has a value of an array holding plugins
+  
+  const path: require('path');
+  const HTMLWebpackPlugin = require('html-webpack-plugin');
+  
+  // this will be inside the object we are exporting
+    output: {
+      path: path.join(__dirname, '/dist'),
+      filename: 'bundle.js'
+    }
+    
+    plugins: [
+      new HTMLWebpackPlugin({
+        template: './src/index.html'
+      })
+    ]
+    -this essentially tells webpack to inject the bundled files it generates into an html called 'index.html' file in our src folder
+
+9. so we need to create an 'index.html' file in src folder
+10. we also need to create a div with the id 'root' in that 'index.html' due to us looking for an element with id 'root' in our App.js
+11. next we go back to webpack.config.js to inform webpack about the loader we are using; we will use babel; to do this we use the key 'module' and a 'rules'(which is an arr of objects) inside that module object to specify how our module is created; we also added in our first rule an 'exclude' so babel DOES NOT transpile node_modules since these are our libraries which we dont need to transpile
+
+  // this will be inside the webpack object we are exporting
+  module: {
+    rules: [
+      {
+        test: /.js$/, <----- that is a regex saying to transfer all files that end in js; so we will use babel to transpile all files that end in .js
+        exclude: /node_modules/, <------- so babel will ignore files in our node_modules
+      }
+    ]
+  },
+12. we then add what we want to do those things with; it will be babel-loader; we will do that using the 'use' keyword it will ahve a val of an object which accepts keys; we add the 'loader' key to specify our loader which will be 'babel-loader' then we add a 'options' key(which is an object that accepts keys) to add a 'presets' key(which is an array of strings) to add our installed presets which are listed in the example below
+
+  // this is inside the first object in the rules array in module in our exported object
+  use: {
+    loader: 'babel-loader',
+    options: {
+    presets: ['@babel/preset-env', '@babel/preset-react']
+  }
+
+13. WE'RE DONE! WEBPACK IS CONFIGURED
+
+Next we will create npm scripts to run our application:
+(think of 'npm start' and the like)
+
+1. our first scripts will be 'npm start'
+2. to begin we delete the 'test' scripts
+3. we add a "start" key with a val of a string "webpack-dev-server"; this will run our webpack dev server in DEVELOPMENT MODE; we will have one for production; this one runs a live reload server our --mode development specification will compile our code in development mode; when it starts we want it to display our application in a new tab so we add '--open'; we also want to add hot module replacement or 'hmr' to our dev enviroment, this exchanges/adds/removes modules while the application is running without requiring a full reload(making it more efficient) we do this by adding '--hot'
+
+  "start": "webpack-dev-server --mode development --open --hot"
+
+After some debugging it works!!! With love reloading!!
+
+Next lets setup our production enviroment:
+
+1. to do this we need to add a "build" key to our scripts; we give it the value of "webpack --mode production" this runs it in production mode... so when we run "npm build" our js will be minified(meaning it is just one long line 'ugly') and bundled into a file called bundle. in a folder called '/dist' which was specified in our "output" in "webpack.congig.js"
+
+  // this is in our scripts
+
+  "build": "webpack --mode production"
+
+2. when you run "npm run build" notice the /dist folder created that has some ~webpack magic~
+
+AND THAT'S IT!
