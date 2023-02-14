@@ -2,7 +2,7 @@
 * we will be using web pack; as our module bundler; most widely used
 * ensure files are in the correct folders as specified - in the tutorial he runs into an error for not having the 'components' folder in the 'src' folder
 * make sure not to mispell anything!!!1 (I did)
-* --save-dev saves the package as a dependency
+* --save-dev saves the package as a dependency(can be done with -D)
 
 Dependencies:
 
