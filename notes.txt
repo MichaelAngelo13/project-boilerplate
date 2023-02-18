@@ -61,7 +61,7 @@ Next we will configure webpack:
 
 8. then we tell webpack the name and location of the bundled file that will be generated when we produce a production build; it is down with the key 'output'; here we bundle all our js files into one file called 'bundle.js'; when it is generate we want this to be placed in a folder named 'dist' to do this we define a path using the built in node 'path' module to use 'join' and '__dirname'; next we make it so our bundled js file will be loaded into an html file to do this we require the 'html-webpack-plugin'; we register this as a plugin use the key 'plugins' which has a value of an array holding plugins
   
-  const path: require('path');
+  const path = require('path');
   const HTMLWebpackPlugin = require('html-webpack-plugin');
   
   // this will be inside the object we are exporting
@@ -78,7 +78,7 @@ Next we will configure webpack:
     -this essentially tells webpack to inject the bundled files it generates into an html called 'index.html' file in our src folder
 
 9. so we need to create an 'index.html' file in src folder
-10. we also need to create a div with the id 'root' in that 'index.html' due to us looking for an element with id 'root' in our App.js
+10. we also need to create a div with the id 'root' in that 'index.html' due to us looking for an element with id 'root' in our Index.js
 11. next we go back to webpack.config.js to inform webpack about the loader we are using; we will use babel; to do this we use the key 'module' and a 'rules'(which is an arr of objects) inside that module object to specify how our module is created; we also added in our first rule an 'exclude' so babel DOES NOT transpile node_modules since these are our libraries which we dont need to transpile
 
   // this will be inside the webpack object we are exporting
