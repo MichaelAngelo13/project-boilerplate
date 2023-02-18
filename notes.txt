@@ -85,8 +85,8 @@ Next we will configure webpack:
   module: {
     rules: [
       {
-        test: /.js$/, <----- that is a regex saying to transfer all files that end in js; so we will use babel to transpile all files that end in .js
-        exclude: /node_modules/, <------- so babel will ignore files in our node_modules
+        test: /.js$/, //(or: /.jsx?/) <----- that is a regex saying to transfer all files that end in js; so we will use babel to transpile all files that end in .js
+        exclude: /node_modules/, // <------- so babel will ignore files in our node_modules
       }
     ]
   },
