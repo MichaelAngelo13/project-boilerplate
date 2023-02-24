@@ -17,6 +17,7 @@ Dependencies:
 9. npm install @babel/preset-react --save-dev;    contains presets for all react plugin; has by default ES6 and preset React for jsx
 10. npm install @babel/preset-env --save-dev;   allows us to use latest javascript code without having to manage which syntax transforms are needed by envs like the browser; makes our code smaller which increases effenciency
 11. npm install html-webpack-plugin --save-dev;    simplifies html file creation to serve our webpack bundles; ie assists in adding our bundled files to our html files
+12. npm install express; a library for node to handle requests
 
 Next we will configure webpack:
 (webpack if very malleable)
